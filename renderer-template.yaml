@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  generateName: render-instance-
+spec:
+  containers:
+    - name: renderer
+      image: alpine
+      command: ["/bin/sh","-c"]
+      args: -
+        apk update &&
+        apk add blender &&
+        blender -b /workdir/blend -E CYCLES -o /workdir
+        -noaudio -s $s_frame -e $e_frame
+        -a -- --cycles-device CPU &&
+        tar -zcpvf output.tar.gz /workdir &&
+        curl -X POST http://127.0.0.1:8000/upload -F 'files=@output.tar.gz'
+      volumeMounts:
+      - name: workdir
+        mountpath: /workdir
+      resources:
+        requests:
+          cpu: 3
+          memory: 8Gi
+        limits:
+          cpu: 4
+          memory: 12Gi
+  initContainers:
+    - name: downloader
+      image: alpine
+      command: ["/bin/sh","-c"]
+      args: ["apk update && apk add wget && wget localhost:8000/blend"]
+      volumeMounts:
+      - name: workdir
+        mountpath: /workdir
+  volumes:
+  - name: workdir
