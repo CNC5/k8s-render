@@ -3,7 +3,7 @@
 upload_port=4503
 serve_port=3240
 localhost='192.168.1.23'
-rand_id=$(openssl rand -base64 12)
+rand_id=$(openssl rand -hex 12)
 if netstat -tulpn | grep $upload_port ; then
     until ! netstat -tulpn | grep $upload_port; do
         let 'upload_port=upload_port+1'
@@ -99,11 +99,11 @@ spec:
 
 TEMPLATE
 pod_name=$(kubectl create -f render-pod-$rand_id.yaml | cut -d ' ' -f 1)
-rm render_pod.yaml
+rm render_pod-$rand_id.yaml
 python3 -m uploadserver $upload_port &
 rx_pid=$!
-trap 'kill $tx_pid; kill $rx_pid' INT
-trap 'kill $tx_pid; kill $rx_pid' TERM
+trap 'kill $tx_pid; kill $rx_pid && exit 1' INT
+trap 'kill $tx_pid; kill $rx_pid && exit 1' TERM
 until kubectl get pods $pod_name | grep Terminated ; do
     sleep 2
 done
