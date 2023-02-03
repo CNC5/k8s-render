@@ -40,7 +40,7 @@ else
     error 'no blend file specified, stopping'; exit 1
 fi
 
-mv $blend_name blend-$rand_id
+cp $blend_name blend-$rand_id
 if [[ -n $2 ]] && [[ -n $3 ]]; then
     if [[ $2 =~ $re ]] && [[ $3 =~ $re ]]; then
         s_frame=$2
