@@ -32,7 +32,7 @@ re='^[0-9]+$'
 if [[ -n $1 ]]; then
     if [[ -e $1 ]]; then
         blend_name=$1
-        info 'blend: $1'
+        info 'blend: $blend_name'
     else
         error 'blend file does not exist, stopping'; exit 1
     fi
@@ -99,7 +99,8 @@ spec:
 
 TEMPLATE
 pod_name=$(kubectl create -f render-pod-$rand_id.yaml | cut -d ' ' -f 1)
-rm render_pod-$rand_id.yaml
+info 'spawned $pod_name'
+rm render-pod-$rand_id.yaml
 python3 -m uploadserver $upload_port &
 rx_pid=$!
 trap 'kill $tx_pid; kill $rx_pid && exit 1' INT
