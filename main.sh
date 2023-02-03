@@ -77,7 +77,7 @@ spec:
       args: ["apk update && apk add blender && blender -b /workdir/blend -E CYCLES -o /workdir -noaudio -s $s_frame -e $e_frame -a -- --cycles-device CPU && tar -zcpvf output.tar.gz /workdir && curl -X POST http://$localhost:$upload_port/upload -F 'files=@output.tar.gz'"]
       volumeMounts:
       - name: workdir
-        mountpath: /workdir
+        mountPath: /workdir
       resources:
         requests:
           cpu: 3
@@ -92,7 +92,7 @@ spec:
       args: ["apk update && apk add wget && wget $localhost:$serve_port/blend-$rand_id"]
       volumeMounts:
       - name: workdir
-        mountpath: /workdir
+        mountPath: /workdir
   restartPolicy: Never
   volumes:
   - name: workdir
