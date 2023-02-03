@@ -27,6 +27,13 @@ error (){
     echo $1
 }
 
+cleanup (){
+info "running cleanup"
+kill $tx_pid
+kill $rx_pid
+rm blend-$rand_id
+}
+
 re="^[0-9]+$"
 
 if [[ -n $1 ]]; then
@@ -103,9 +110,10 @@ info "spawned $pod_name"
 rm render-pod-$rand_id.yaml
 python3 -m uploadserver $upload_port &
 rx_pid=$!
-trap "kill $tx_pid; kill $rx_pid && exit 1" INT
-trap "kill $tx_pid; kill $rx_pid && exit 1" TERM
+trap "cleanup; exit 1" INT
+trap "cleanup; exit 1" TERM
 until kubectl get pods $pod_name | grep Terminated ; do
     sleep 2
 done
 mv output.tar.gz $pod_name-output.tar.gz
+cleanup
