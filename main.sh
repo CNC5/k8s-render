@@ -18,7 +18,7 @@ fi
 
 debug=true
 info (){
-    if [ $debug == 'true' ]; then
+    if [[ $debug == 'true' ]]; then
         echo $1
     fi
 }
@@ -29,8 +29,8 @@ error (){
 
 re='^[0-9]+$'
 
-if [ -n $1 ]; then
-    if [ -e $1 ]; then
+if [[ -n $1 ]]; then
+    if [[ -e $1 ]]; then
         blend_name=$1
         info 'blend: $1'
     else
@@ -41,7 +41,7 @@ else
 fi
 
 mv $blend_name blend-$rand_id
-if [ -n $2] && [ -n $3 ]; then
+if [[ -n $2 ]] && [[ -n $3 ]]; then
     if [[ $2 =~ $re ]] && [[ $3 =~ $re ]]; then
         s_frame=$2
         e_frame=$3
