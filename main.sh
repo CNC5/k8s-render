@@ -98,7 +98,8 @@ spec:
   - name: workdir
 
 TEMPLATE
-pod_name=$(kubectl create -f render-pod-$rand_id.yaml | cut -d " " -f 1)
+pod_name=$(kubectl create -f render-pod-$rand_id.yaml | cut -d " " -f 1 | cut -d "/" -f 2)
+echo $pod_name > $pod_name.lock
 info "spawned $pod_name"
 rm render-pod-$rand_id.yaml
 python3 -m uploadserver $upload_port &
