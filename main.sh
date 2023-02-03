@@ -108,7 +108,7 @@ python3 -m uploadserver $upload_port &
 rx_pid=$!
 trap "cleanup; exit 1" INT
 trap "cleanup; exit 1" TERM
-until kubectl get pods $pod_name | grep Terminated ; do
+until kubectl get pods $pod_name | grep Completed ; do
     sleep 2
 done
 mv output.tar.gz $pod_name-output.tar.gz
