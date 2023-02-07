@@ -72,7 +72,7 @@ fi
 cp $blend_name blend-$rand_id
 if [[ -n $2 ]]; then
     if [[ $2 =~ $re ]]; then
-        s_frame=$2
+        e_frame=$2
         info "using specified frame range"
     else
         error "specified frames are not numbers"; exit 1
@@ -174,4 +174,4 @@ frame_distribute () {
     cleanup $pod_pool
 }
 
-frame_distribute $2 $3
+frame_distribute $e_frame $parts
