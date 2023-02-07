@@ -111,7 +111,7 @@ spec:
     - name: renderer
       image: alpine
       command: ["/bin/sh","-c"]
-      args: ["apk update && apk add curl blender && blender -b /workdir/blend -E CYCLES -o /workdir/ -noaudio -s $s_frame -e $e_frame -a -- --cycles-device CPU && tar -zcpvf $id-output.tar.gz /workdir && curl -X POST http://$localhost:$rx_port/upload -F 'files=@$id-output.tar.gz'"]
+      args: ["apk update && apk add curl blender wget && wget $localhost:$tx_port/blend-$rand_id -O /workdir/blend && blender -b /workdir/blend -E CYCLES -o /workdir/ -noaudio -s $s_frame -e $e_frame -a -- --cycles-device CPU && tar -zcpvf $id-output.tar.gz /workdir && curl -X POST http://$localhost:$rx_port/upload -F 'files=@$id-output.tar.gz'"]
       volumeMounts:
       - name: workdir
         mountPath: /workdir
@@ -122,14 +122,6 @@ spec:
         limits:
           cpu: 4
           memory: 12Gi
-  initContainers:
-    - name: downloader
-      image: alpine
-      command: ["/bin/sh","-c"]
-      args: ["apk update && apk add wget && wget $localhost:$tx_port/blend-$rand_id -O /workdir/blend"]
-      volumeMounts:
-      - name: workdir
-        mountPath: /workdir
   restartPolicy: Never
   volumes:
   - name: workdir
