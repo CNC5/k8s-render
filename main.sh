@@ -70,10 +70,9 @@ else
 fi
 
 cp $blend_name blend-$rand_id
-if [[ -n $2 ]] && [[ -n $3 ]]; then
-    if [[ $2 =~ $re ]] && [[ $3 =~ $re ]]; then
+if [[ -n $2 ]]; then
+    if [[ $2 =~ $re ]]; then
         s_frame=$2
-        e_frame=$3
         info "using specified frame range"
     else
         error "specified frames are not numbers"; exit 1
@@ -84,17 +83,16 @@ else
     info "using default frame range"
 fi
 
-if [[ -n $4 ]]; then
-    if [[ $4 =~ $re ]]; then
-        s_frame=$2
-        e_frame=$3
-        info "using specified frame range"
+if [[ -n $3 ]]; then
+    if [[ $3 =~ $re ]]; then
+        parts=$3
+        info "using specified pod count"
     else
-        error "specified frames are not numbers"; exit 1
+        error "specified pod count is NaN"; exit 1
     fi
 else
     parts=1
-    info "using default frame range"
+    info "using default pod count (1)"
 fi
 
 spawn_pod () {
