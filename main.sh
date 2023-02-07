@@ -157,7 +157,7 @@ frame_distribute () {
             pod_name=$(spawn_pod $((prev_point+1)) $point $serve_port $upload_port $i)
             prev_point=$point
             echo $pod_name > $pod_name.lock
-            pod_pool="$pod_pool $pod_name")
+            pod_pool="$pod_pool $pod_name"
         done
     fi
     pod_name=$(spawn_pod $((prev_point+1)) $total $server_port $upload_port $parts)
