@@ -19,12 +19,12 @@ echo '    third will do 11 frames'
 
 upload_port=4503
 serve_port=3240
-localhost="192.168.1.23"
+localhost='192.168.1.23'
 rand_id=$(openssl rand -hex 12)
 debug=true
 
 info (){
-    if [[ $debug == "true" ]]; then
+    if [[ $debug == 'true' ]]; then
         echo $1
     fi
 }
@@ -35,8 +35,9 @@ error (){
 
 cleanup (){
     pool=$1
-    info "running cleanup"
-    kubectl delete pod $pod_pool
+    info ''
+    info 'running cleanup'
+    kubectl delete pod $pool
     kill $tx_pid
     kill $rx_pid
     rm blend-$rand_id
@@ -63,36 +64,36 @@ if [[ -n $1 ]]; then
         blend_name=$1
         info "blend: $blend_name"
     else
-        error "blend file does not exist, stopping"; show_help; exit 1
+        error 'blend file does not exist, stopping'; show_help; exit 1
     fi
 else
-    error "no blend file specified, stopping"; show_help; exit 1
+    error 'no blend file specified, stopping'; show_help; exit 1
 fi
 
 cp $blend_name blend-$rand_id
 if [[ -n $2 ]]; then
     if [[ $2 =~ $re ]]; then
         e_frame=$2
-        info "using specified frame range"
+        info 'using specified frame range'
     else
-        error "specified frames are not numbers"; exit 1
+        error 'specified frames are not numbers'; exit 1
     fi
 else
     s_frame=1
     e_frame=1
-    info "using default frame range"
+    info 'using default frame range'
 fi
 
 if [[ -n $3 ]]; then
     if [[ $3 =~ $re ]]; then
         parts=$3
-        info "using specified pod count"
+        info 'using specified pod count'
     else
-        error "specified pod count is NaN"; exit 1
+        error 'specified pod count is NaN'; exit 1
     fi
 else
     parts=1
-    info "using default pod count (1)"
+    info 'using default pod count (1)'
 fi
 
 spawn_pod () {
