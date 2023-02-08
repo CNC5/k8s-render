@@ -160,8 +160,8 @@ frame_distribute () {
     echo $pod_pool
     python3 -m uploadserver $upload_port &
     rx_pid=$!
-    trap "cleanup; exit 1" INT
-    trap "cleanup; exit 1" TERM
+    trap "cleanup $pod_pool; exit 1" INT
+    trap "cleanup $pod_pool; exit 1" TERM
     until [[ $(kubectl get pods $pod_pool | grep Completed | wc -l) = $parts ]]; do
         sleep 2
     done
